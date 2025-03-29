@@ -1,14 +1,9 @@
 import { useState } from "react";
 import QuoteGeneratorImage from "../assets/quote_generator.webp";
 import PokedexImage from "../assets/pokedex.webp";
-import PortfolioImage from "../assets/portfolio.webp";
 import JavaScriptIcon from "./icon/JavaScriptIcon";
 import HtmlIcon from "./icon/HtmlIcon";
 import CssIcon from "./icon/CssIcon";
-import ReactIcon from "./icon/ReactIcon";
-import TypeScriptIcon from "./icon/TypeScriptIcon";
-import TailwindIcon from "./icon/TailwindIcon";
-import PhpIcon from "./icon/PhpIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { motion } from "framer-motion";
@@ -31,14 +26,6 @@ const projects = [
     github: "https://github.com/Camille-ldt/Pokedex",
     link: "",
     technologies: [HtmlIcon, CssIcon, JavaScriptIcon],
-  },
-  {
-    title: "Portfolio",
-    image: PortfolioImage,
-    description: "Ce site permet d'afficher mes projets.",
-    github: "https://github.com/Camille-ldt/Portfolio",
-    link: "",
-    technologies: [TypeScriptIcon, ReactIcon, TailwindIcon, PhpIcon],
   },
 ];
 
