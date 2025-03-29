@@ -83,7 +83,7 @@ const Contact: React.FC<ContactProps> = () => {
     try {
       console.log("Données du formulaire : ", formData);
 
-      const response = await fetch("http://api-portfolio.test/mailer.php", {
+      const response = await fetch("http://portfolio-api.test/mailer.php", {
         method: "POST",
         headers: {
           Accept: "application/json",
