@@ -83,17 +83,20 @@ const Contact: React.FC<ContactProps> = () => {
     try {
       console.log("Données du formulaire : ", formData);
 
-      const response = await fetch("http://portfolio-api.test/mailer.php", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData, // Les données du formulaire
-          captcha: captchaValue, // Ajouter la réponse du reCAPTCHA
-        }),
-      });
+      const response = await fetch(
+        "https://portfolio-api.onrender.com/mailer.php",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData, // Les données du formulaire
+            captcha: captchaValue, // Ajouter la réponse du reCAPTCHA
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erreur du serveur");
