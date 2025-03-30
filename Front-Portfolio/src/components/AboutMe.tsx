@@ -7,6 +7,7 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { motion } from "framer-motion";
 import Typewriter from "./Writer";
+import Me from "../assets/me.png";
 
 const AboutMe = () => {
   return (
@@ -17,7 +18,7 @@ const AboutMe = () => {
           <div className="flex flex-col items-center text-center sm:items-center sm:text-center md:items-center md:text-center lg:items-start lg:text-left">
             <div className="h-35 w-35 sm:h-40 sm:w-40 md:h-60 md:w-60 lg:h-70 lg:w-70 rounded-full overflow-hidden flex-shrink-0">
               <img
-                src="../src/assets/me.png"
+                src={Me}
                 alt="Avatar"
                 className="h-full w-full object-cover scale-150 object-[30%]"
               />
