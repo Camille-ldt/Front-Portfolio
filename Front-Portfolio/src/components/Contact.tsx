@@ -84,7 +84,7 @@ const Contact: React.FC<ContactProps> = () => {
       console.log("Données du formulaire : ", formData);
 
       const response = await fetch(
-        "https://portfolio-api.onrender.com/api/mailer.php",
+        "https://portfolio-api.onrender.com/mailer.php",
         {
           method: "POST",
           headers: {
