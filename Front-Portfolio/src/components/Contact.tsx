@@ -1,9 +1,20 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { ToastContainer, toast } from "react-toastify";
 import ReCAPTCHA from "react-google-recaptcha";
 import React from "react";
 
-const Contact: React.FC = () => {
+interface ContactProps {
+  value: string | null;
+  firstname: string;
+  lastname: string;
+  company: string;
+  email: string;
+  number: string;
+  message: string;
+}
+
+const Contact: React.FC<ContactProps> = () => {
   const [formData, setFormData] = useState({
     lastname: "",
     firstname: "",
@@ -28,29 +39,25 @@ const Contact: React.FC = () => {
     const { name, value } = e.target;
 
     if (name === "number") {
-      let numericValue = value.replace(/[^\d+]/g, ""); // Autoriser "+"
+      let numericValue = value.replace(/\D/g, "");
 
-      // Vérifier si c'est un numéro FR valide après saisie complète
-      if (numericValue.length >= 10) {
-        if (numericValue.startsWith("+33")) {
-          numericValue = "0" + numericValue.slice(3);
-        }
-
-        if (!numericValue.startsWith("06") && !numericValue.startsWith("07")) {
-          toast.error("Le numéro doit commencer par 06 ou 07.");
-          return;
-        }
-
-        // Formatter avec des tirets
-        numericValue = numericValue
-          .slice(0, 10)
-          .replace(/(\d{2})/g, "$1-")
-          .slice(0, -1);
+      if (numericValue.startsWith("33")) {
+        numericValue = "0" + numericValue.slice(2);
       }
+
+      if (!numericValue.startsWith("06") && !numericValue.startsWith("07")) {
+        return;
+      }
+
+      const formattedValue =
+        numericValue
+          .slice(0, 10)
+          .match(/.{1,2}/g)
+          ?.join("-") || "";
 
       setFormData((prev) => ({
         ...prev,
-        number: numericValue,
+        number: formattedValue,
       }));
     } else {
       setFormData((prev) => ({
@@ -83,7 +90,7 @@ const Contact: React.FC = () => {
           },
           body: JSON.stringify({
             ...formData,
-            "g-recaptcha-response": captchaValue, // Nom utilisé par Google
+            captcha: captchaValue,
           }),
         }
       );
@@ -105,6 +112,7 @@ const Contact: React.FC = () => {
           number: "",
           message: "",
         });
+        setCaptchaValue(null);
       } else {
         toast.error(data.message);
       }
@@ -120,7 +128,7 @@ const Contact: React.FC = () => {
     <section>
       <div className="bg-orange-50 px-6 py-5 sm:py-10 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-center text-2xl sm:text-3xl md:text-5xl font-semibold mt-2 sm:mt-3 md:mt-5 mb-5 sm:mb-5 md:mb-10">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-semibold mt-2 sm:mt-3 md:mt-5 mb-5 sm:mb-5 md:mb-10">
             Contact
           </h2>
         </div>
@@ -136,16 +144,20 @@ const Contact: React.FC = () => {
               >
                 Prénom
               </label>
-              <input
-                id="firstname"
-                name="firstname"
-                type="text"
-                className="block w-full rounded-md px-3.5 py-2 text-base text-gray-900 outline-gray-300 focus:outline-stone-800"
-                onChange={handleChange}
-                value={formData.firstname}
-                required
-              />
+              <div className="mt-2.5">
+                <input
+                  id="firstname"
+                  name="firstname"
+                  type="text"
+                  autoComplete="given-name"
+                  className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-gray-300 placeholder:text-gray-400 focus:outline-stone-800"
+                  onChange={handleChange}
+                  value={formData.firstname}
+                  required
+                />
+              </div>
             </div>
+
             <div>
               <label
                 htmlFor="lastname"
@@ -153,64 +165,71 @@ const Contact: React.FC = () => {
               >
                 Nom
               </label>
-              <input
-                id="lastname"
-                name="lastname"
-                type="text"
-                className="block w-full rounded-md px-3.5 py-2 text-base text-gray-900 outline-gray-300 focus:outline-stone-800"
-                onChange={handleChange}
-                value={formData.lastname}
-                required
-              />
+              <div className="mt-2.5">
+                <input
+                  id="lastname"
+                  name="lastname"
+                  type="text"
+                  autoComplete="family-name"
+                  className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-gray-300 placeholder:text-gray-400 focus:outline-stone-800"
+                  onChange={handleChange}
+                  value={formData.lastname}
+                  required
+                />
+              </div>
             </div>
+
             <div className="sm:col-span-2">
               <label
-                htmlFor="email"
+                htmlFor="number"
                 className="block text-sm font-semibold text-gray-900"
               >
-                Email
+                Numéro de téléphone
               </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className="block w-full rounded-md px-3.5 py-2 text-base text-gray-900 outline-gray-300 focus:outline-stone-800"
-                onChange={handleChange}
-                value={formData.email}
-                required
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="message"
-                className="block text-sm font-semibold text-gray-900"
-              >
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={4}
-                className="block w-full rounded-md px-3.5 py-2 text-base text-gray-900 outline-gray-300 focus:outline-stone-800"
-                onChange={handleChange}
-                value={formData.message}
-                required
-              />
+              <div className="mt-2.5">
+                <div className="flex rounded-md bg-white outline-gray-300 focus-within:outline-stone-800">
+                  <div className="grid shrink-0 grid-cols-1">
+                    <select
+                      id="country"
+                      name="country"
+                      autoComplete="country"
+                      className="col-start-1 row-start-1 w-full appearance-none rounded-md py-2 pr-7 pl-3.5 text-base text-gray-500 placeholder:text-gray-400 focus:outline-stone-800 sm:text-sm"
+                    >
+                      <option>FR</option>
+                    </select>
+                    <ChevronDownIcon className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" />
+                  </div>
+                  <input
+                    id="number"
+                    name="number"
+                    type="tel"
+                    autoComplete="tel"
+                    className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 placeholder:text-gray-400 focus:outline-stone-800"
+                    onChange={handleChange}
+                    value={formData.number}
+                    required
+                  />
+                </div>
+              </div>
             </div>
           </div>
-          <div className="mt-5 flex justify-center">
+
+          <div className="mt-8 text-center">
             <ReCAPTCHA
               sitekey="6Lcdq_0qAAAAAIqVstxgoP7yTQWIIxcbKs5fyElS"
               onChange={handleCaptchaChange}
             />
+            <button
+              type="submit"
+              className={`mt-7 px-6 py-2 text-base font-semibold text-white bg-stone-800 rounded-md shadow-sm transition-all hover:bg-stone-700 focus:outline-indigo-600 ${
+                loading || !captchaValue ? "cursor-not-allowed opacity-50" : ""
+              }`}
+              disabled={loading || !captchaValue}
+            >
+              {loading ? "Envoi en cours..." : "Envoyer"}
+            </button>
+            <ToastContainer />
           </div>
-          <button
-            type="submit"
-            className="mt-6 w-full bg-blue-600 text-white py-2 rounded-md"
-            disabled={loading}
-          >
-            {loading ? "Envoi en cours..." : "Envoyer"}
-          </button>
         </form>
       </div>
     </section>
