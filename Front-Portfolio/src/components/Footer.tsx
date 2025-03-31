@@ -1,4 +1,3 @@
-import { AnchorHTMLAttributes } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
@@ -8,7 +7,7 @@ import { JSX } from "react/jsx-runtime";
 interface FooterItem {
   name: string;
   href: string;
-  icon?: (props: AnchorHTMLAttributes<HTMLAnchorElement>) => JSX.Element;
+  icon: (props: { className?: string }) => JSX.Element;
 }
 
 interface Footer {
@@ -20,24 +19,22 @@ const footer: Footer = {
     {
       name: "LinkedIn",
       href: "https://www.linkedin.com/in/camille-laidet/",
-      icon: (props) => (
+      icon: ({ className }) => (
         <FontAwesomeIcon
           icon={faLinkedin}
           size="2x"
-          className="text-gray-900 h-7 w-7 sm:h-7 sm:w-7 md:h-10 md:w-10"
-          {...props}
+          className={`${className} text-gray-900`}
         />
       ),
     },
     {
       name: "GitHub",
       href: "https://github.com/Camille-ldt",
-      icon: (props) => (
+      icon: ({ className }) => (
         <FontAwesomeIcon
           icon={faGithub}
           size="2x"
-          className="text-gray-900 h-7 w-7 sm:h-7 sm:w-7 md:h-10 md:w-10"
-          {...props}
+          className={`${className} text-gray-900`}
         />
       ),
     },
@@ -57,18 +54,18 @@ const Footer = () => {
 
         {/* Social media icons */}
         <div className="mt-5 mb-5 flex justify-center gap-x-10">
-          {footer.social.map((item) =>
-            item.icon ? (
-              <a
-                key={item.name}
-                href={item.href}
-                className="transform transition-transform duration-200 hover:scale-150 text-dark"
-              >
-                <span className="sr-only">{item.name}</span>
-                {item.icon({ className: "h-9 w-9" })}
-              </a>
-            ) : null
-          )}
+          {footer.social.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transform transition-transform duration-200 hover:scale-150 text-dark"
+            >
+              <span className="sr-only">{item.name}</span>
+              {item.icon({ className: "h-9 w-9" })}{" "}
+            </a>
+          ))}
         </div>
 
         <p className="mb-2 mt-5 text-center text-sm/6 text-gray-300">
