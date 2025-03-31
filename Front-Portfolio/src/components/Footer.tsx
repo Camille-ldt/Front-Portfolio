@@ -21,36 +21,24 @@ const footer: Footer = {
       name: "LinkedIn",
       href: "https://www.linkedin.com/in/camille-laidet/",
       icon: (props) => (
-        <a
-          href="https://www.linkedin.com/in/camille-laidet/"
-          target="_blank"
-          rel="noopener noreferrer"
+        <FontAwesomeIcon
+          icon={faLinkedin}
+          size="2x"
+          className="text-gray-900 h-7 w-7 sm:h-7 sm:w-7 md:h-10 md:w-10"
           {...props}
-        >
-          <FontAwesomeIcon
-            icon={faLinkedin}
-            size="2x"
-            className="text-gray-900 h-7 w-7 sm:h-7 sm:w-7 md:h-10 md:w-10"
-          />
-        </a>
+        />
       ),
     },
     {
       name: "GitHub",
       href: "https://github.com/Camille-ldt",
       icon: (props) => (
-        <a
-          href="https://github.com/Camille-ldt"
-          target="_blank"
-          rel="noopener noreferrer"
+        <FontAwesomeIcon
+          icon={faGithub}
+          size="2x"
+          className="text-gray-900 h-7 w-7 sm:h-7 sm:w-7 md:h-10 md:w-10"
           {...props}
-        >
-          <FontAwesomeIcon
-            icon={faGithub}
-            size="2x"
-            className="text-gray-900 h-7 w-7 sm:h-7 sm:w-7 md:h-10 md:w-10"
-          />
-        </a>
+        />
       ),
     },
   ],
@@ -77,7 +65,7 @@ const Footer = () => {
                 className="transform transition-transform duration-200 hover:scale-150 text-dark"
               >
                 <span className="sr-only">{item.name}</span>
-                <item.icon aria-hidden="true" className="h-9 w-9" />
+                {item.icon({ className: "h-9 w-9" })}
               </a>
             ) : null
           )}
