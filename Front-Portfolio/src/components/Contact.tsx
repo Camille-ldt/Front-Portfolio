@@ -70,6 +70,63 @@ const Contact: React.FC<ContactProps> = () => {
     }
   };
 
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   setLoading(true); // Définir l'état de chargement sur true au début
+
+  //   if (!captchaValue) {
+  //     toast.error("Veuillez valider le reCAPTCHA.");
+  //     setLoading(false);
+  //     return; // Si le captcha n'est pas validé, on ne soumet pas le formulaire
+  //   }
+
+  //   try {
+  //     console.log("Données du formulaire : ", formData);
+
+  //     const response = await fetch(
+  //       "https://api-portfolio-i7od.onrender.com/mailer.php",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Accept: "application/json",
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           ...formData, // Les données du formulaire
+  //           captcha: captchaValue, // Ajouter la réponse du reCAPTCHA
+  //         }),
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error("Erreur du serveur");
+  //     }
+
+  //     const data = await response.json();
+  //     console.log("Réponse du serveur : ", data);
+
+  //     if (data.success) {
+  //       toast.success(data.message); // Afficher le message du serveur
+  //       setFormData({
+  //         // Réinitialiser le formulaire
+  //         firstname: "",
+  //         lastname: "",
+  //         company: "",
+  //         email: "",
+  //         number: "",
+  //         message: "",
+  //       });
+  //     } else {
+  //       toast.error(data.message); // Afficher le message d'erreur du serveur
+  //     }
+  //   } catch (error: any) {
+  //     toast.error("Erreur lors de l'envoi du message");
+  //     console.error("Erreur : ", error);
+  //   } finally {
+  //     setLoading(false); // Définir l'état de chargement sur false à la fin
+  //   }
+  // };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true); // Définir l'état de chargement sur true au début
@@ -98,13 +155,26 @@ const Contact: React.FC<ContactProps> = () => {
         }
       );
 
+      // Vérification si la réponse est correcte
       if (!response.ok) {
         throw new Error("Erreur du serveur");
       }
 
-      const data = await response.json();
-      console.log("Réponse du serveur : ", data);
+      // On essaie de récupérer le JSON du serveur
+      const responseText = await response.text();
+      console.log("Réponse brute du serveur : ", responseText);
 
+      // Tentative de parser la réponse en JSON
+      let data;
+      try {
+        data = JSON.parse(responseText);
+        console.log("Réponse du serveur en JSON : ", data);
+      } catch (e) {
+        // Si la réponse n'est pas un JSON valide
+        throw new Error("La réponse du serveur n'est pas un JSON valide.");
+      }
+
+      // Gestion de la réponse
       if (data.success) {
         toast.success(data.message); // Afficher le message du serveur
         setFormData({
@@ -120,6 +190,7 @@ const Contact: React.FC<ContactProps> = () => {
         toast.error(data.message); // Afficher le message d'erreur du serveur
       }
     } catch (error: any) {
+      // Gestion des erreurs
       toast.error("Erreur lors de l'envoi du message");
       console.error("Erreur : ", error);
     } finally {
